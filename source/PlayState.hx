@@ -214,6 +214,15 @@ class PlayState extends MusicBeatState
 	var bottomBoppers:BGSprite;
 	var santa:BGSprite;
 	var heyTimer:Float;
+	
+	var skyBG:FlxSprite;
+	var thing:FlxSprite;
+	var house:FlxSprite;
+	var snow:FlxSprite;
+
+	var skyNEON:FlxSprite;
+	var thingLOL:FlxSprite;
+	var houseNEON:FlxSprite;
 
 	var bgGirls:BackgroundGirls;
 	var wiggleShit:WiggleEffect = new WiggleEffect();
@@ -368,8 +377,12 @@ class PlayState extends MusicBeatState
 					curStage = 'school';
 				case 'thorns':
 					curStage = 'schoolEvil';
+				case 'lo-freeze' | 'leader':
+					curStage = 'rooftop';
+				case 'rooftop-party' | 'mtc':
+					curStage = 'rooftopsnowy';
 				default:
-					curStage = 'stage';
+					curStage = 'swagmountain';
 			}
 		}
 
@@ -422,31 +435,46 @@ class PlayState extends MusicBeatState
 
 		switch (curStage)
 		{
-			case 'stage': //Week 1
-				var bg:BGSprite = new BGSprite('stageback', -600, -200, 0.9, 0.9);
+			case 'swagmountain': //Week Horns, Hamster Song
+				var bg:BGSprite = new BGSprite('swagmountain/back', 0, 0, 0.9, 0.9);
+				bg.screenCenter(XY);
 				add(bg);
 
-				var stageFront:BGSprite = new BGSprite('stagefront', -650, 600, 0.9, 0.9);
-				stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
+				var stageFront:BGSprite = new BGSprite('swagmountain/front', 0, 0, 0.9, 0.9);
+				stageFront.screenCenter(XY);
 				stageFront.updateHitbox();
 				add(stageFront);
+			case 'rooftop': //Week Moon - Lo-Freeze, Leader
+				skyBG = new BGSprite('rooftop/bg', -120, -50, 0.1, 0.1);
+				add(skyBG);
+
 				if(!ClientPrefs.lowQuality) {
-					var stageLight:BGSprite = new BGSprite('stage_light', -125, -100, 0.9, 0.9);
-					stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
-					stageLight.updateHitbox();
-					add(stageLight);
-					var stageLight:BGSprite = new BGSprite('stage_light', 1225, -100, 0.9, 0.9);
-					stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
-					stageLight.updateHitbox();
-					stageLight.flipX = true;
-					add(stageLight);
+					thing = new BGSprite('rooftop/high/thing', -220, 480, 0.4, 0.4, ['background thing']);
+					add(thing);
 
-					var stageCurtains:BGSprite = new BGSprite('stagecurtains', -500, -300, 1.3, 1.3);
-					stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-					stageCurtains.updateHitbox();
-					add(stageCurtains);
+					house = new BGSprite('rooftop/House', -120, 550, 1, 1);
+
+					snow = new BGSprite('rooftop/high/Snow', 0, 0, 0, 0, ['help'], true);
+					snow.animation.addByPrefix('coming', 'coming', 24, false);
+					snow.animation.addByPrefix('help', 'help', 24, true);
+					snow.setGraphicSize(Std.int(snow.width * 1.5));
+					snow.screenCenter(XY);
+					snow.visible = false;
 				}
+			case 'rooftopsnowy': //Week Moon - Rooftop Party, Masturbate To Cartoons
+				skyNEON = new BGSprite('rooftop/bg2', -120, -50, 0.1, 0.1, ['mycum']);
+				skyNEON.animation.addByPrefix('neon', 'neonshit');
+				skyNEON.animation.addByPrefix('normal', 'mycum');
+				add(skyNEON);
 
+				if(!ClientPrefs.lowQuality) {
+					thingLOL = new BGSprite('rooftop/high/thing', -220, 480, 0.4, 0.4, ['background thing']);
+					add(thingLOL);
+
+					houseNEON = new BGSprite('rooftop/Houses', -120, 550, 1, 1, ['NooMyCumCollection']);
+          houseNEON.animation.addByPrefix('neon', 'MechanicalKeyboard');
+					houseNEON.animation.addByPrefix('normal', 'NooMyCumCollection');
+        }
 			case 'spooky': //Week 2
 				if(!ClientPrefs.lowQuality) {
 					halloweenBG = new BGSprite('halloween_bg', -200, -100, ['halloweem bg0', 'halloweem bg lightning strike']);
@@ -700,11 +728,21 @@ class PlayState extends MusicBeatState
 		add(gfGroup); //Needed for blammed lights
 
 		// Shitty layering but whatev it works LOL
+
+		if (curStage == 'rooftop')
+			add(house);
+
+    if (curStage == 'rooftopsnowy')
+      add(houseNEON);
+
 		if (curStage == 'limo')
 			add(limo);
 
 		add(dadGroup);
 		add(boyfriendGroup);
+
+		if (curStage == 'rooftop')
+			add(snow);
 		
 		if(curStage == 'spooky') {
 			add(halloweenWhite);
